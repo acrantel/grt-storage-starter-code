@@ -16,6 +16,7 @@ public class StorageMech {
 
     /* if the analog input value is greater than this number, then there is a lemon in front of the sensor */
     private static final int LEMON_THRESHOLD = 1200;
+    private int lemons = 0;
 
 
     public StorageMech() {
@@ -31,8 +32,22 @@ public class StorageMech {
      */
     public void update() {
         // take input from sensors and make motors move here
-        if (irTop.getValue() > LEMON_THRESHOLD) {
-            motor.set(ControlMode.PercentOutput, 0.5);
+
+    
+            if (irTop.getValue() > LEMON_THRESHOLD && irBottom.getValue()  > LEMON_THRESHOLD) {
+                motor.set(ControlMode.PercentOutput, 0.5);
+            } else if(irRamp.getValue() > LEMON_THRESHOLD){
+                motor.set(ControlMode.PercentOutput, 0.5);
+            }
+            else if(irBottom.getValue() > LEMON_THRESHOLD && irTop.getValue() < LEMON_THRESHOLD){
+                motor.set(ControlMode.PercentOutput, 0.75);
+            }
+
+            while (irRamp.getValue() < LEMON_THRESHOLD){
+                motor.set(ControlMode.PercentOutput, 0.75);
+            }
+
         }
+
     }
 }
